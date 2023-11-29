@@ -122,21 +122,21 @@ $ echo "/bin/ls" | ./hsh
 hsh main.c shell.c
 ```
 
-### Contributing
+## Contributing
 
 Contributions to the Simple Shell project are welcome! Please follow the guidelines in the CONTRIBUTING.md file to contribute effectively.
 
 
-### Authors
+## Authors
 
 The individuals contributing to this project are listed in the AUTHORS file to recognize their valuable input and collaboration.
 
 
-### License
+## License
 
 This project is licensed under the [License Name]. Refer to the LICENSE file for detailed information about the license terms and conditions.
 
 
-### Acknowledgements
+## Acknowledgements
 
 We express our gratitude to the open-source community for their valuable resources and support that contributed to the development of this Simple Shell project.
