@@ -66,8 +66,8 @@ To set up the Simple Shell, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/simple-shell.git
-    cd simple-shell
+    git clone https://github.com/your-username/simple_shell.git
+    cd simple_shell
     ```
 
 2. Compile the shell:
