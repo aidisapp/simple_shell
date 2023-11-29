@@ -100,8 +100,9 @@ To compile the shell after making changes, use the following command:
 
 ```bash
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```
 
-Testing
+## Testing
 
 The shell should function in both interactive and non-interactive modes. For example:
 
@@ -112,24 +113,29 @@ $ ./hsh
 ($) /bin/ls
 hsh main.c shell.c
 ($) exit
+```
 
 ### Non-interactive mode:
 
 ```bash
 $ echo "/bin/ls" | ./hsh
 hsh main.c shell.c
+```
 
 ### Contributing
 
 Contributions to the Simple Shell project are welcome! Please follow the guidelines in the CONTRIBUTING.md file to contribute effectively.
 
+
 ### Authors
 
 The individuals contributing to this project are listed in the AUTHORS file to recognize their valuable input and collaboration.
 
+
 ### License
 
 This project is licensed under the [License Name]. Refer to the LICENSE file for detailed information about the license terms and conditions.
+
 
 ### Acknowledgements
 
