@@ -11,4 +11,3 @@ int custom_print(char *str)
 {
 	return (write(STDOUT_FILENO, &str, strlen(str)));
 }
-

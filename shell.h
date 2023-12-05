@@ -13,4 +13,3 @@
 int _print(char *str);
 
 #endif
-
