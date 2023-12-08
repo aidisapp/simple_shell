@@ -79,7 +79,7 @@ void exec_cmd(const char *command)
  */
 int main(void)
 {
-	char command[130];
+	char command[110];
 
 	while (1)
 	{
