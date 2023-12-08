@@ -10,6 +10,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-int _print(char *str);
+int custom_print(char *str);
+void prompt(void);
+void read_input_cmd(char *command, size_t size);
+void exec_cmd(const char *command);
 
 #endif
+
