@@ -1,21 +1,13 @@
 #include "shell.h"
 
 /**
- * prompt - Function to display prompt for user input
- */
-void prompt(void)
-{
-	custom_print("simple_shell_$ ");
-}
-
-/**
  * read_input_cmd - Function to read the user input
- * @command: the command to read
+ * @cmd: the command to read
  * @size: size of the input command
  */
-void read_input_cmd(char *command, size_t size)
+void read_input_cmd(char *cmd, size_t size)
 {
-	if (fgets(command, size, stdin) == NULL)
+	if (fgets(cmd, size, stdin) == NULL)
 	{
 		if (feof(stdin))
 		{
@@ -28,16 +20,16 @@ void read_input_cmd(char *command, size_t size)
 			exit(EXIT_FAILURE);
 		}
 	}
-	command[strcspn(command, "\n")] = '\0';
+	cmd[strcspn(cmd, "\n")] = '\0';
 }
 
 /**
  * exec_cmd - Function to read the user input
- * @command: the command to read
+ * @cmd: the command to read
  * args[arg_count] = NULL - Null-terminate the arguments array
  * execvp(args[0], args) - Execute the command
  */
-void exec_cmd(const char *command)
+void exec_cmd(const char *cmd)
 {
 	pid_t child_pid = fork();
 
@@ -51,7 +43,7 @@ void exec_cmd(const char *command)
 		char *args[110];
 		int arg_count = 0;
 
-		char *token = strtok((char *)command, " ");
+		char *token = strtok((char *)cmd, " ");
 
 		while (token != NULL)
 		{
@@ -79,13 +71,13 @@ void exec_cmd(const char *command)
  */
 int main(void)
 {
-	char command[110];
+	char input_cmd[110];
 
 	while (1)
 	{
-		prompt();
-		read_input_cmd(command, sizeof(command));
-		exec_cmd(command);
+		custom_print("simple_shell_$ ");
+		read_input_cmd(input_cmd, sizeof(input_cmd));
+		exec_cmd(input_cmd);
 	}
 
 	return (0);
