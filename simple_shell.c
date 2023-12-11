@@ -1,6 +1,17 @@
 #include "shell.h"
 
 /**
+ * custom_error - Function to read the user input
+ * @args: the error message
+ */
+void custom_error(char *args)
+{
+	write(2, "./hsh: 1: ", 10);
+	write(2, args, strlen(args));
+	write(2, ": not found", 11);
+}
+
+/**
  * read_input_cmd - Function to read the user input
  * @cmd: the command to read
  * @size: size of the input command
@@ -54,9 +65,7 @@ void exec_cmd(const char *cmd)
 
 		execvp(args[0], args);
 
-		write(2, "./hsh: 1: ", 10);
-		write(2, args[0], strlen(args[0]));
-		write(2, ": not found", 11);
+		custom_error(args[0]);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -78,7 +87,7 @@ int main(void)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO == 1))
-		custom_print("# ");
+			custom_print("# ");
 
 		read_input_cmd(input_cmd, sizeof(input_cmd));
 		exec_cmd(input_cmd);

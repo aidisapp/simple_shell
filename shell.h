@@ -13,6 +13,7 @@
 
 
 int custom_print(char *str);
+void custom_error(char *args);
 void read_input_cmd(char *command, size_t size);
 void exec_cmd(const char *command);
 
