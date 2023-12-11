@@ -74,7 +74,9 @@ int main(void)
 
 	while (1)
 	{
-		custom_print("simple_shell_$ ");
+		if (isatty(STDIN_FILENO == 1))
+		custom_print("# ");
+
 		read_input_cmd(input_cmd, sizeof(input_cmd));
 		exec_cmd(input_cmd);
 	}
