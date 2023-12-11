@@ -28,6 +28,7 @@ void read_input_cmd(char *cmd, size_t size)
  * @cmd: the command to read
  * args[arg_count] = NULL - Null-terminate the arguments array
  * execvp(args[0], args) - Execute the command
+ * custom_print("Error executing command");
  */
 void exec_cmd(const char *cmd)
 {
@@ -53,7 +54,9 @@ void exec_cmd(const char *cmd)
 
 		execvp(args[0], args);
 
-		custom_print("Error executing command.\n");
+		write(2, "./hsh: 1: ", 10);
+		write(2, args[0], strlen(args[0]));
+		write(2, ": not found", 11);
 		exit(EXIT_FAILURE);
 	}
 	else
