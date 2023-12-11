@@ -16,7 +16,7 @@ void read_input_cmd(char *cmd, size_t size)
 		}
 		else
 		{
-			custom_print("Error while reading input.\n");
+			custom_print("Error while reading command.\n");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -32,6 +32,8 @@ void read_input_cmd(char *cmd, size_t size)
 void exec_cmd(const char *cmd)
 {
 	pid_t child_pid = fork();
+	char *args[110], *token;
+	int arg_count = 0;
 
 	if (child_pid == -1)
 	{
@@ -40,10 +42,7 @@ void exec_cmd(const char *cmd)
 	}
 	else if (child_pid == 0)
 	{
-		char *args[110];
-		int arg_count = 0;
-
-		char *token = strtok((char *)cmd, " ");
+		token = strtok((char *)cmd, " ");
 
 		while (token != NULL)
 		{
