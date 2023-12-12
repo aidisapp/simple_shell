@@ -9,6 +9,9 @@ void custom_error(char *args)
 	write(2, "./hsh: 1: ", 10);
 	write(2, args, strlen(args));
 	write(2, ": not found", 11);
+
+	if (isatty(STDIN_FILENO == 1))
+		write(2, "\n", 1);
 }
 
 /**
@@ -87,9 +90,13 @@ int main(void)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO == 1))
-			custom_print("# ");
+			custom_print("$ ");
 
 		read_input_cmd(input_cmd, sizeof(input_cmd));
+
+		if (strcmp(input_cmd, "exit") == 0)
+			exit(EXIT_SUCCESS);
+
 		exec_cmd(input_cmd);
 	}
 
