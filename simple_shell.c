@@ -61,6 +61,12 @@ void exec_cmd(const char *cmd)
 
 		while (token != NULL)
 		{
+			if (token[0] == '#')
+			{
+				token = NULL;
+				break;
+			}
+
 			args[arg_count++] = token;
 			token = strtok(NULL, " ");
 		}
