@@ -91,7 +91,7 @@ void exec_cmd(const char *cmd)
  */
 int main(void)
 {
-	char input_cmd[110];
+	char input_cmd[120], *token;
 
 	while (1)
 	{
@@ -100,7 +100,9 @@ int main(void)
 
 		read_input_cmd(input_cmd, sizeof(input_cmd));
 
-		if (strcmp(input_cmd, "exit") == 0)
+		token = strtok(input_cmd, " \t\n\r");
+
+		if (strcmp(token, "exit") == 0)
 			exit(EXIT_SUCCESS);
 
 		exec_cmd(input_cmd);
