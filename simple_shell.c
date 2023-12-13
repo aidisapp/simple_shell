@@ -1,20 +1,6 @@
 #include "shell.h"
 
 /**
- * custom_error - Function to read the user input
- * @args: the error message
- */
-void custom_error(char *args)
-{
-	write(2, "./hsh: 1: ", 10);
-	write(2, args, strlen(args));
-	write(2, ": not found", 11);
-
-	if (isatty(STDIN_FILENO == 1))
-		write(2, "\n", 1);
-}
-
-/**
  * read_input_cmd - Function to read the user input
  * @cmd: the command to read
  * @size: size of the input command
@@ -47,8 +33,8 @@ void read_input_cmd(char *cmd, size_t size)
 void exec_cmd(const char *cmd)
 {
 	pid_t child_pid = fork();
-	char *args[110], *token;
-	int arg_count = 0;
+	char *args[120], *token_str;
+	int count = 0;
 
 	if (child_pid == -1)
 	{
@@ -57,24 +43,18 @@ void exec_cmd(const char *cmd)
 	}
 	else if (child_pid == 0)
 	{
-		token = strtok((char *)cmd, " ");
+		token_str = strtok((char *)cmd, " ");
 
-		while (token != NULL)
+		while (token_str != NULL)
 		{
-			if (token[0] == '#')
-			{
-				token = NULL;
-				break;
-			}
-
-			args[arg_count++] = token;
-			token = strtok(NULL, " ");
+			args[count++] = token_str;
+			token_str = strtok(NULL, " ");
 		}
-		args[arg_count] = NULL;
+		args[count] = NULL;
 
 		execvp(args[0], args);
 
-		custom_error(args[0]);
+		custom_print("Error executing command.\n");
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -91,20 +71,12 @@ void exec_cmd(const char *cmd)
  */
 int main(void)
 {
-	char input_cmd[120], *token;
+	char input_cmd[120];
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO == 1))
-			custom_print("$ ");
-
+		custom_print("$ ");
 		read_input_cmd(input_cmd, sizeof(input_cmd));
-
-		token = strtok(input_cmd, " \t\n\r");
-
-		if (strcmp(token, "exit") == 0)
-			exit(EXIT_SUCCESS);
-
 		exec_cmd(input_cmd);
 	}
 
