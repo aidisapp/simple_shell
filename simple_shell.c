@@ -1,67 +1,108 @@
 #include "shell.h"
 
 /**
- * prompt - Function to read the user input
+ * execute_cmd - function that executes the command
+ * Display prompts for user
+ * @token: command token
+ * @env: Environment
+ * @cmd_line_num: number of arguments
  *
- * Return: the number of characters read
+ * Return: 0 if successful
  */
-void prompt(void)
+int execute_cmd(char **token, list_t *env, int cmd_line_num)
 {
-	char cwd[1024];
+	int exit_stat = 0;
 
-	getcwd(cwd, sizeof(cwd));
-	custom_print("$ ");
+	exit_stat = handle_builtin(token, env, cmd_line_num, NULL);
+
+	if (exit_stat)
+		return (exit_stat);
+
+	exit_stat = _execve(token, env, cmd_line_num);
+	return (exit_stat);
 }
 
 /**
- * handle_command - Function to read the user input
- * @input: Command to execute
+ * process_cmd - function to process command
+ * @cmd: Environment
+ * @env: Command to execute
+ * @cmd_line_num: Number of arguments
  *
- * Return: the number of characters read
+ * Return: 0 on success
  */
-void handle_command(char *input)
+int process_cmd(char *cmd, list_t *env, int cmd_line_num)
 {
-	pid_t pid = fork();
+	char *n_command, **token;
+	int exit_stat = 0, n = 0;
 
-	if (pid == 0)
+	n_command = cmd;
+	cmd = trim_space(cmd);
+	n = 0;
+
+	while (cmd[n] != '\n')
+		n++;
+
+	cmd[n] = '\0';
+	if (cmd[0] == '\0')
 	{
-		char **argv = malloc(2 * sizeof(char *));
-
-		argv[0] = input;
-		argv[1] = NULL;
-
-		if (execve(input, argv, environ) == -1)
-		{
-			custom_print("./hsh: No such file or directory\n");
-			free(argv);
-			exit(EXIT_FAILURE);
-		}
+		free(n_command);
+		return (exit_stat);
 	}
-	else if (pid < 0)
-		perror("fork");
-	else
-		waitpid(pid, NULL, 0);
+
+	token = NULL;
+	token = _str_tok(cmd, " ");
+
+	if (n_command != NULL)
+		free(n_command);
+
+	exit_stat = execute_cmd(token, env, cmd_line_num);
+	return (exit_stat);
 }
 
 /**
- * main - Main entry point
- * This function is the main function of the shell application
- *
- * Return: 0 on success, -1 on failure
+ * display_prompt - function to display prompt
+ * Display prompts for user and executes commands when given
+ * @arg_env: envrionmental variables
+ * Return: 0 on success
  */
-int main(void)
+int display_prompt(char **arg_env)
 {
-	char input[MAX_INPUT_SIZE];
+	list_t *env = env_linked_list(arg_env);
+	size_t count = 0;
+	int cmd_line_num = 0, exit_stat = 0;
+	char *cmd;
 
-	while (1)
+	while (true)
 	{
-		prompt();
+		cmd_line_num++;
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "$ ", 2);
+		else
+			non_interactive(env);
 
-		if (!fgets(input, MAX_INPUT_SIZE, stdin))
-			break;
-
-		handle_command(input);
+		signal(SIGINT, ctrl_c);
+		cmd = NULL;
+		count = get_line(&cmd);
+		ctrl_D(count, cmd, env);
+		exit_stat = process_cmd(cmd, env, cmd_line_num);
 	}
+
+	return (exit_stat);
+}
+
+/**
+ * main - creates a simple shell
+ * @argc: argument count
+ * @argv: argument vectors
+ * @env: environmental variables
+ * Return: 0 on success
+ */
+int main(int argc, char *argv[], char **env)
+{
+	(void)argc;
+	(void)argv;
+
+	display_prompt(env);
 
 	return (0);
 }
