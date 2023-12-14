@@ -1,0 +1,5 @@
+*.mod*
+*.cmd
+.tmp_versions/
+a.out
+hsh
