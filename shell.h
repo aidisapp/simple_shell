@@ -11,11 +11,16 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <ctype.h>
+#include <errno.h>
 
+#define MAX_INPUT_SIZE 1024
+
+extern char **environ;
 
 int custom_print(char *str);
-void read_input_cmd(char *command, size_t size);
-void exec_cmd(const char *command);
+void custom_error(char *args);
+void prompt(void);
+void handle_command(char *input);
 
 #endif
 

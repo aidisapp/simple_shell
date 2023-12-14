@@ -1,83 +1,66 @@
 #include "shell.h"
 
 /**
- * read_input_cmd - Function to read the user input
- * @cmd: the command to read
- * @size: size of the input command
+ * prompt - Function to read the user input
+ *
+ * Return: the number of characters read
  */
-void read_input_cmd(char *cmd, size_t size)
+void prompt(void)
 {
-	if (fgets(cmd, size, stdin) == NULL)
-	{
-		if (feof(stdin))
-		{
-			custom_print("\n");
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			custom_print("Error while reading command.\n");
-			exit(EXIT_FAILURE);
-		}
-	}
-	cmd[strcspn(cmd, "\n")] = '\0';
+	char cwd[1024];
+
+	getcwd(cwd, sizeof(cwd));
+	custom_print("$ ");
 }
 
 /**
- * exec_cmd - Function to read the user input
- * @cmd: the command to read
- * args[arg_count] = NULL - Null-terminate the arguments array
- * execvp(args[0], args) - Execute the command
- * custom_print("Error executing command");
+ * handle_command - Function to read the user input
+ * @input: Command to execute
+ *
+ * Return: the number of characters read
  */
-void exec_cmd(const char *cmd)
+void handle_command(char *input)
 {
-	pid_t child_pid = fork();
-	char *args[120], *token_str;
-	int count = 0;
+	pid_t pid = fork();
 
-	if (child_pid == -1)
+	if (pid == 0)
 	{
-		custom_print("Error forking process.\n");
-		exit(EXIT_FAILURE);
-	}
-	else if (child_pid == 0)
-	{
-		token_str = strtok((char *)cmd, " ");
+		char **argv = malloc(2 * sizeof(char *));
 
-		while (token_str != NULL)
+		argv[0] = input;
+		argv[1] = NULL;
+
+		if (execve(input, argv, environ) == -1)
 		{
-			args[count++] = token_str;
-			token_str = strtok(NULL, " ");
+			custom_print("./hsh: No such file or directory\n");
+			free(argv);
+			exit(EXIT_FAILURE);
 		}
-		args[count] = NULL;
-
-		execvp(args[0], args);
-
-		custom_print("Error executing command.\n");
-		exit(EXIT_FAILURE);
 	}
+	else if (pid < 0)
+		perror("fork");
 	else
-	{
-		wait(NULL);
-	}
+		waitpid(pid, NULL, 0);
 }
 
 /**
  * main - Main entry point
  * This function is the main function of the shell application
  *
- * Return: o on success, -1 on failure
+ * Return: 0 on success, -1 on failure
  */
 int main(void)
 {
-	char input_cmd[120];
+	char input[MAX_INPUT_SIZE];
 
 	while (1)
 	{
-		custom_print("$ ");
-		read_input_cmd(input_cmd, sizeof(input_cmd));
-		exec_cmd(input_cmd);
+		prompt();
+
+		if (!fgets(input, MAX_INPUT_SIZE, stdin))
+			break;
+
+		handle_command(input);
 	}
 
 	return (0);
