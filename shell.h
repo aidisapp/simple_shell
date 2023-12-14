@@ -30,14 +30,16 @@ typedef struct list
 
 } list_t;
 
-int prompt(char **env);
+int display_prompt(char **env);
+int process_cmd(char *cmd, list_t *env, int cmd_line_num);
+int execute_cmd(char **token, list_t *env, int cmd_line_num);
 void ctrl_c(int n);
 void ctrl_D(int i, char *command, list_t *env);
-int built_in(char **token, list_t *env, int num, char **command);
+int handle_builtin(char **token, list_t *env, int num, char **command);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 size_t get_line(char **str);
 int t_strlen(char *str, int pos, char delm);
-char *ignore_space(char *str);
+char *trim_space(char *str);
 char **_str_tok(char *str, char *delm);
 char **c_str_tok(char *str, char *delm);
 char *_strcat(char *dest, char *src);
