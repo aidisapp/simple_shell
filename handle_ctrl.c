@@ -6,8 +6,8 @@
 */
 void handle_ctrl_c(int c)
 {
-(void)c;
-custom_print("\n$ ");
+	(void)c;
+	custom_print("\n$ ");
 }
 
 /**
@@ -18,15 +18,15 @@ custom_print("\n$ ");
 */
 void handle_ctrl_d(int arg, char *cmd, list_t *env)
 {
-if (arg == 0)
-{
-	free(cmd);
-	free_linked_list(env);
+	if (arg == 0)
+	{
+		free(cmd);
+		free_linked_list(env);
 
-	if (isatty(STDIN_FILENO))
-	custom_print("\n");
+		if (isatty(STDIN_FILENO))
+			custom_print("\n");
 
-	exit(EXIT_SUCCESS);
-}
+		exit(EXIT_SUCCESS);
+	}
 }
 
