@@ -30,11 +30,12 @@ typedef struct list
 
 } list_t;
 
+int custom_print(char *str);
 int display_prompt(char **env);
 int process_cmd(char *cmd, list_t *env, int cmd_line_num);
 int execute_cmd(char **token, list_t *env, int cmd_line_num);
-void ctrl_c(int n);
-void ctrl_D(int i, char *command, list_t *env);
+void handle_ctrl_c(int c);
+void handle_ctrl_d(int arg, char *cmd, list_t *env);
 int handle_builtin(char **token, list_t *env, int num, char **command);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 size_t get_line(char **str);
@@ -49,7 +50,8 @@ int _strcmp(char *s1, char *s2);
 int _cd(char **str, list_t *env, int num);
 void non_interactive(list_t *env);
 char *_which(char *str, list_t *env);
-int __exit(char **s, list_t *env, int num, char **command);
+int exit_program(char **args, list_t *env_vars, int cmd_num, char **cmd);
+int string_to_int(char *str);
 int _execve(char *argv[], list_t *env, int num);
 void free_double_ptr(char **str);
 void free_linked_list(list_t *list);
