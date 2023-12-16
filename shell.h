@@ -21,7 +21,7 @@ extern char **environ;
 /**
  * struct list - environmental variables linked list struct
  * @v: holds environmental variable string
- * @next_node: points to next_node node
+ * @next_node: pointer to the next_node node head
  */
 typedef struct list
 {
@@ -31,42 +31,51 @@ typedef struct list
 } list_t;
 
 int custom_print(char *str);
+void print_string(char *str, int len);
 int display_prompt(char **env);
 int process_cmd(char *cmd, list_t *env, int cmd_line_num);
 int execute_cmd(char **token, list_t *env, int cmd_line_num);
 void handle_ctrl_c(int c);
 void handle_ctrl_d(int arg, char *cmd, list_t *env);
 int handle_builtin(char **token, list_t *env, int num, char **command);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-size_t get_line(char **str);
+void *mem_alloc(void *ptr, unsigned int o_size, unsigned int n_size);
+size_t get_user_line(char **str);
 int t_strlen(char *str, int pos, char delm);
 char *trim_space(char *str);
-char **_str_tok(char *str, char *delm);
-char **c_str_tok(char *str, char *delm);
+char *trim_space_alt(char *str);
+char **custom_strtok(char *str, char *delm);
+char **cont_delim(char *str, char *delm);
 char *_strcat(char *dest, char *src);
 char *_strdup(char *str);
 char *_strcpy(char *dest, char *src);
 int _strcmp(char *s1, char *s2);
-int _cd(char **str, list_t *env, int num);
-void non_interactive(list_t *env);
-char *_which(char *str, list_t *env);
+int exec_cd(char **cmd, list_t *env_list, int n);
+void pipe_commands(list_t *env);
+char *match_path(char *str, list_t *env);
 int exit_program(char **args, list_t *env_vars, int cmd_num, char **cmd);
 int string_to_int(char *str);
-int _execve(char *argv[], list_t *env, int num);
-void free_double_ptr(char **str);
-void free_linked_list(list_t *list);
-int _env(char **str, list_t *env);
-char *get_env(char *str, list_t *env);
-list_t *env_linked_list(char **env);
-list_t *add_end_node(list_t **head, char *str);
-size_t print_list(list_t *h);
-int delete_nodeint_at_index(list_t **head, int index);
-int _unsetenv(list_t **env, char **str);
+int custom_exec(char **user_cmd, list_t *env_vars, int cmd_num);
+void free_pointer(char **str);
+void free_list(list_t *list);
+int custom_env(char **cmd, list_t *env_list);
+char *fetch_env_v(char *str, list_t *env);
+list_t *linked_list(char **env_list);
+list_t *add_list_end(list_t **head, char *str);
+size_t print_linked_list(list_t *h);
+int delete_list_idx(list_t **head, int index);
+int unset_env(list_t **env, char **str);
 int _setenv(list_t **env, char **str);
-int find_env(list_t *env, char *str);
-void not_found(char *str, int num, list_t *env);
-void cant_cd_to(char *str, int c_n, list_t *env);
-void illegal_number(char *str, int c_n, list_t *env);
+int custom_setenv(list_t **env_list, char *var_name, char *path);
+list_t *get_node(list_t *head, int index);
+void change_to_home_directory(list_t *env, char *current);
+int change_dir(list_t *env_list, char *cur_dir, char *new_dir,
+char *arg, int line);
+char *get_directory(char **cmd, list_t *env_list);
+int find_env_list(list_t *env, char *str);
+char *get_shell_name(list_t *env);
+void err_not_found(char *str, int cmd_n, list_t *env);
+void handle_cd_error(char *dir, int cmd_count, list_t *env);
+void handle_exit_num(char *str, int c_n, list_t *env);
 char *int_to_string(int num);
 
 #endif

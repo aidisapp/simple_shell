@@ -18,7 +18,7 @@ int execute_cmd(char **token, list_t *env, int cmd_line_num)
 	if (exit_stat)
 		return (exit_stat);
 
-	exit_stat = _execve(token, env, cmd_line_num);
+	exit_stat = custom_exec(token, env, cmd_line_num);
 	return (exit_stat);
 }
 
@@ -50,7 +50,7 @@ int process_cmd(char *cmd, list_t *env, int cmd_line_num)
 	}
 
 	token = NULL;
-	token = _str_tok(cmd, " ");
+	token = custom_strtok(cmd, " ");
 
 	if (n_command != NULL)
 		free(n_command);
@@ -67,7 +67,7 @@ int process_cmd(char *cmd, list_t *env, int cmd_line_num)
  */
 int display_prompt(char **arg_env)
 {
-	list_t *env = env_linked_list(arg_env);
+	list_t *env = linked_list(arg_env);
 	size_t count = 0;
 	int cmd_line_num = 0, exit_stat = 0;
 	char *cmd;
@@ -78,12 +78,12 @@ int display_prompt(char **arg_env)
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "$ ", 2);
 		else
-			non_interactive(env);
+			pipe_commands(env);
 
-		signal(SIGINT, ctrl_c);
+		signal(SIGINT, handle_ctrl_c);
 		cmd = NULL;
-		count = get_line(&cmd);
-		ctrl_D(count, cmd, env);
+		count = get_user_line(&cmd);
+		handle_ctrl_d(count, cmd, env);
 		exit_stat = process_cmd(cmd, env, cmd_line_num);
 	}
 
